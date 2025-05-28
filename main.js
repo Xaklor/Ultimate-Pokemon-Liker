@@ -31,48 +31,23 @@ const shapes = new Map([
 const gens = Array(9).fill([0, 0]); 
 const stages = Array(5).fill([0, 0]);
 
-dex.forEach(randomize);
-for(let i = 0; i < dex.length; i++) {
-    let mon = dex[i];
-    types.get(mon.type1)[0] += mon.rating;
-    types.get(mon.type1)[1]++;
-    if(mon.type2 != null) {
-        types.get(mon.type2)[0] += mon.rating;
-        types.get(mon.type2)[1]++;    
-    }
-    eggs.get(mon.egg1)[0] += mon.rating;
-    eggs.get(mon.egg1)[1]++;
-    if(mon.egg2 != null) {
-        eggs.get(mon.egg2)[0] += mon.rating;
-        eggs.get(mon.egg2)[1]++;    
-    }
-    shapes.get(mon.shape)[0] += mon.rating;
-    shapes.get(mon.shape)[1]++;
-    gens[mon.gen - 1][0] += mon.rating;
-    gens[mon.gen - 1][1]++;
-    stages[mon.stage][0] += mon.rating;
-    stages[mon.stage][1]++;
-}
-
 // npx http-server -p [port number] -e html
 let step = 0;
+document.getElementById("name").innerText = dex[step].name;
 document.getElementById("image").src = "mons/" + dex[step].filename;
-document.getElementById("button1") .addEventListener("click", on_button_click);
-document.getElementById("button2") .addEventListener("click", on_button_click);
-document.getElementById("button3") .addEventListener("click", on_button_click);
-document.getElementById("button4") .addEventListener("click", on_button_click);
-document.getElementById("button5") .addEventListener("click", on_button_click);
-document.getElementById("button6") .addEventListener("click", on_button_click);
-document.getElementById("button7") .addEventListener("click", on_button_click);
-document.getElementById("button8") .addEventListener("click", on_button_click);
-document.getElementById("button9") .addEventListener("click", on_button_click);
-document.getElementById("button10").addEventListener("click", on_button_click);
+document.getElementById("button1") .addEventListener("click", on_rating_button_click);
+document.getElementById("button2") .addEventListener("click", on_rating_button_click);
+document.getElementById("button3") .addEventListener("click", on_rating_button_click);
+document.getElementById("button4") .addEventListener("click", on_rating_button_click);
+document.getElementById("button5") .addEventListener("click", on_rating_button_click);
+document.getElementById("button6") .addEventListener("click", on_rating_button_click);
+document.getElementById("button7") .addEventListener("click", on_rating_button_click);
+document.getElementById("button8") .addEventListener("click", on_rating_button_click);
+document.getElementById("button9") .addEventListener("click", on_rating_button_click);
+document.getElementById("button10").addEventListener("click", on_rating_button_click);
+document.getElementById("button_back").addEventListener("click", on_back_button_click);
 
 // FUNCTIONS
-
-function randomize(mon) {
-    mon.rating = Math.floor(Math.random() * 10) + 1;
-}
 
 function standard_deviation(avg, category, set, dex) {
     let variance = 0;
@@ -129,7 +104,7 @@ function standard_deviation(avg, category, set, dex) {
     }
 }
 
-function on_button_click() {
+function on_rating_button_click() {
     // "this" is the button that prompted the callback
     switch(this.id) {
         case "button1":  dex[step].rating = 1;  break;
@@ -143,7 +118,61 @@ function on_button_click() {
         case "button9":  dex[step].rating = 9;  break;
         case "button10": dex[step].rating = 10; break;
     }
-    console.log(dex[step].rating); 
-    step = (step + 1) % dex.length;
-    document.getElementById("image").src = "mons/" + dex[step].filename;
+    console.log(dex[step].name + ": " + dex[step].rating);
+    step = (step + 1);
+    if(step >= dex.length) {
+        evaluate();
+    } else {
+        document.getElementById("name").innerText = dex[step].name;
+        document.getElementById("image").src = "mons/" + dex[step].filename;
+    }
+}
+
+function on_back_button_click() {
+    if(step > 0) {
+        step--;
+        document.getElementById("name").innerText = dex[step].name;
+        document.getElementById("image").src = "mons/" + dex[step].filename;
+    }
+}
+
+function evaluate() {
+    for(let i = 0; i < dex.length; i++) {
+        let mon = dex[i];
+        types.get(mon.type1)[0] += mon.rating;
+        types.get(mon.type1)[1]++;
+        if(mon.type2 != null) {
+            types.get(mon.type2)[0] += mon.rating;
+            types.get(mon.type2)[1]++;    
+        }
+        eggs.get(mon.egg1)[0] += mon.rating;
+        eggs.get(mon.egg1)[1]++;
+        if(mon.egg2 != null) {
+            eggs.get(mon.egg2)[0] += mon.rating;
+            eggs.get(mon.egg2)[1]++;    
+        }
+        shapes.get(mon.shape)[0] += mon.rating;
+        shapes.get(mon.shape)[1]++;
+        gens[mon.gen - 1][0] += mon.rating;
+        gens[mon.gen - 1][1]++;
+        stages[mon.stage][0] += mon.rating;
+        stages[mon.stage][1]++;
+    }
+
+    console.log("RESULTS:");
+    for(let [type, data] of types.entries()) {
+        console.log(type + ": " + data[0] / data[1] + ", std: " + standard_deviation(data[0] / data[1], categories.TYPE, type, dex));
+    }
+    for(let [egg, data] of eggs.entries()) {
+        console.log(egg + ": " + data[0] / data[1] + ", std: " + standard_deviation(data[0] / data[1], categories.EGG_GROUP, egg, dex));
+    }
+    for(let [shape, data] of shapes.entries()) {
+        console.log(shape + ": " + data[0] / data[1] + ", std: " + standard_deviation(data[0] / data[1], categories.SHAPE, shape, dex));
+    }
+    for(let i = 0; i < gens.length; i++) {
+        console.log("generation " + (i + 1) + ": " + gens[i][0] / gens[i][1] + ", std: " + standard_deviation(gens[i][0] / gens[i][1], categories.GENERATION, i + 1, dex));
+    }
+    for(let i = 0; i < stages.length; i++) {
+        console.log("evolution stage " + (i + 1) + ": " + stages[i][0] / stages[i][1] + ", std: " + standard_deviation(stages[i][0] / stages[i][1], categories.STAGE, i, dex));
+    }
 }
