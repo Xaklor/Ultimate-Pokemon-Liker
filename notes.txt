@@ -1,0 +1,28 @@
+arceus's forms are not listed separately (simple palette swaps)
+deerling's forms are not listed separately (simple palette swaps)
+genesect's forms are not listed separately (simple palette swaps)
+flabebe's forms are not listed separately (simple palette swaps)
+floette's forms are not listed separately (simple palette swaps)
+florges's forms are not listed separately (simple palette swaps)
+aegislash's forms are not listed separately (it's the same guy just standing differently)
+xerneas neutral mode is not listed (it's not actually a different mode it's just a thing it does for some reason)
+silvally's forms are not listed separately (simple palette swaps)
+core minior's forms are not listed separately (simple palette swaps)
+mimikyu's forms are not listed separately (it's the same guy just standing differently)
+cramorant's forms are not listed separately (it's just holding another pokemon)
+morpeko palette swap
+squawkabilly palette swap
+palafin's zero form is not listed (it's nearly identical to finizen)
+tatsugiri palette swap
+dudunsparce and maushold's pointless altforms
+mega latias/latios are the same
+gmax flappletun are the same
+megas are all gen 6
+gmaxes are all gen 8
+stellar terapagos is normal type
+ditto is in no eggs discovered group
+gmax forms do not have shape listed separately, so they inherit base form. flappletun inherits flapple.
+megas/gmaxes are listed as a separate evolution stage
+primals and eternamax count as mega/gmax, but ultra burst does not
+vivillon's forms are not listed separately (I cannot be bothered)
+gmaxes inherit color
