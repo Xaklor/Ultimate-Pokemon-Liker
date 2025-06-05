@@ -33,8 +33,8 @@ const stages = Array(5).fill([0, 0]);
 
 // npx http-server -p [port number] -e html
 let step = 0;
-document.getElementById("name").innerText = dex[step].name;
-document.getElementById("image").src = "mons/" + dex[step].filename;
+// document.getElementById("name").innerText = dex[step].name;
+// document.getElementById("image").src = "mons/" + dex[step].filename;
 document.getElementById("button1") .addEventListener("click", on_rating_button_click);
 document.getElementById("button2") .addEventListener("click", on_rating_button_click);
 document.getElementById("button3") .addEventListener("click", on_rating_button_click);
@@ -124,7 +124,8 @@ function on_rating_button_click() {
         evaluate();
     } else {
         document.getElementById("name").innerText = dex[step].name;
-        document.getElementById("image").src = "mons/" + dex[step].filename;
+        document.getElementById(dex[step].name).style = "display: inline;";
+        document.getElementById(dex[step - 1].name).style = "display: none;";
     }
 }
 
@@ -132,7 +133,8 @@ function on_back_button_click() {
     if(step > 0) {
         step--;
         document.getElementById("name").innerText = dex[step].name;
-        document.getElementById("image").src = "mons/" + dex[step].filename;
+        document.getElementById(dex[step].name).style = "display: inline;";
+        document.getElementById(dex[step + 1].name).style = "display: none;";
     }
 }
 

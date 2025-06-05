@@ -1,9 +1,25 @@
 body {
-  background-color: powderblue;
+  background-color: white;
 }
-h1 {
-  color: blue;
+div.main {
+  width: 1000px;
+  margin: auto;
 }
-p {
-  color: red;
+div.heading {
+  background-color: darkslategray;
+}
+div.content {
+  background-color: coral;
+  display: flex;
+}
+div.body {
+  background-color: cornflowerblue;
+  padding: 10px;
+}
+div.side {
+  background-color: darkseagreen;
+  padding: 10px;
+}
+div.footer {
+  background-color: darkslategray;
 }
