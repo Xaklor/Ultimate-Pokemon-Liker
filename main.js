@@ -29,12 +29,10 @@ const shapes = new Map([
 ]);
 
 const gens = Array(9).fill([0, 0]); 
-const stages = Array(5).fill([0, 0]);
+const stages = Array(6).fill([0, 0]);
 
 // npx http-server -p [port number] -e html
 let step = 0;
-// document.getElementById("name").innerText = dex[step].name;
-// document.getElementById("image").src = "mons/" + dex[step].filename;
 document.getElementById("button1") .addEventListener("click", on_rating_button_click);
 document.getElementById("button2") .addEventListener("click", on_rating_button_click);
 document.getElementById("button3") .addEventListener("click", on_rating_button_click);
