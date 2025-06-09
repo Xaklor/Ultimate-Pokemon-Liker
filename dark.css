@@ -2,7 +2,7 @@ body {
   background-color: white;
 }
 div.main {
-  width: 1000px;
+  width: 1200px;
   margin: auto;
 }
 div.heading {
@@ -15,11 +15,21 @@ div.content {
 div.body {
   background-color: cornflowerblue;
   padding: 10px;
+  width: 66.7%;
 }
 div.side {
   background-color: darkseagreen;
   padding: 10px;
+  width: 33.3%;
 }
 div.footer {
   background-color: darkslategray;
+}
+div.tables {
+  background-color: goldenrod;
+  display:flex;
+}
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
 }

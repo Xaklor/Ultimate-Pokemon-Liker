@@ -1,7 +1,7 @@
 import pokemon from "./pokemon.js";
 
 const dex = [
-    // name, gen, type1, type2, egg1, egg2, shape, stage, color
+    // name, dex#, gen, type1, type2, egg1, egg2, shape, stage, color
     new pokemon("bulbasaur",                  1,    1, "grass",    "poison",   "monster",    "grass",     "quadruped",  1, "green",  "0001Bulbasaur.webp"),
     new pokemon("ivysaur",                    2,    1, "grass",    "poison",   "monster",    "grass",     "quadruped",  2, "green",  "0002Ivysaur.webp"),
     new pokemon("venusaur",                   3,    1, "grass",    "poison",   "monster",    "grass",     "quadruped",  3, "green",  "0003Venusaur.webp"),
