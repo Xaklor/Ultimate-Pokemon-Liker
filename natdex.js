@@ -28,7 +28,7 @@ const dex = [
     new pokemon("mega beedrill",              15,   6, "bug",      "poison",   "bug",        null  ,      "butterfly",  4, "yellow", "0015Beedrill-Mega.webp"),
     new pokemon("pidgey",                     16,   1, "normal",   "flying",   "flying",     null  ,      "wings",      1, "brown",  "0016Pidgey.webp"),
     new pokemon("pidgeotto",                  17,   1, "normal",   "flying",   "flying",     null  ,      "wings",      2, "brown",  "0017Pidgeotto.webp"),
-    new pokemon("pidgeotto",                  18,   1, "normal",   "flying",   "flying",     null  ,      "wings",      3, "brown",  "0018Pidgeot.webp"),
+    new pokemon("pidgeot",                    18,   1, "normal",   "flying",   "flying",     null  ,      "wings",      3, "brown",  "0018Pidgeot.webp"),
     new pokemon("mega pidgeot",               18,   6, "normal",   "flying",   "flying",     null  ,      "wings",      4, "brown",  "0018Pidgeot-Mega.webp"),
     new pokemon("rattata",                    19,   1, "normal",   null  ,     "field",      null  ,      "quadruped",  1, "purple", "0019Rattata.webp"),
     new pokemon("alolan rattata",             19,   7, "normal",   "dark",     "field",      null  ,      "quadruped",  1, "black",  "0019Rattata-Alola.webp"),
