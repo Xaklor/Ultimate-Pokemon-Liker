@@ -10,31 +10,37 @@ const categories = Object.freeze({
 });
 
 // these are [sum, count] pairs
-const types = new Map([
+let types = new Map([
     ["fighting", [0, 0]], ["normal", [0, 0]], ["ghost", [0, 0]], ["grass",  [0, 0]], ["fire", [0, 0]], ["ice",   [0, 0]],
     ["electric", [0, 0]], ["flying", [0, 0]], ["steel", [0, 0]], ["ground", [0, 0]], ["rock", [0, 0]], ["bug",   [0, 0]],
     ["psychic",  [0, 0]], ["poison", [0, 0]], ["water", [0, 0]], ["dragon", [0, 0]], ["dark", [0, 0]], ["fairy", [0, 0]] 
 ]);
 
-const eggs = new Map([
+let eggs = new Map([
     ["human-like", [0, 0]], ["water 1", [0, 0]], ["dragon",  [0, 0]], ["field", [0, 0]], ["bug",  [0, 0]], 
     ["amorphous",  [0, 0]], ["water 2", [0, 0]], ["monster", [0, 0]], ["grass", [0, 0]], ["none", [0, 0]],   
     ["mineral",    [0, 0]], ["water 3", [0, 0]], ["flying",  [0, 0]], ["fairy", [0, 0]]
 ]);
 
-const shapes = new Map([
+let shapes = new Map([
     ["serpentine", [0, 0]], ["butterfly", [0, 0]], ["head", [0, 0]], ["legs", [0, 0]], ["wings", [0, 0]], 
     ["tentacles",  [0, 0]], ["insectoid", [0, 0]], ["arms", [0, 0]], ["fins", [0, 0]], ["biped", [0, 0]],   
     ["quadruped",  [0, 0]], ["multibody", [0, 0]], ["dino", [0, 0]], ["body", [0, 0]]
 ]);
 
-const colors = new Map([
+let colors = new Map([
     ["yellow", [0, 0]], ["black", [0, 0]], ["brown", [0, 0]], ["gray", [0, 0]], ["red",  [0, 0]],
     ["purple", [0, 0]], ["white", [0, 0]], ["green", [0, 0]], ["pink", [0, 0]], ["blue", [0, 0]]
 ])
 
-const gens = Array(9).fill([0, 0]); 
-const stages = Array(6).fill([0, 0]);
+// this feels like heresy since these could be an array but for display purposes I need index tracked separately
+let gens = new Map([
+    [1, [0, 0]], [2, [0, 0]], [3, [0, 0]], [4, [0, 0]], [5, [0, 0]], [6, [0, 0]], [7, [0, 0]], [8, [0, 0]], [9, [0, 0]]
+]);
+
+let stages = new Map([
+    [0, [0, 0]], [1, [0, 0]], [2, [0, 0]], [3, [0, 0]], [4, [0, 0]], [5, [0, 0]]
+]);
 
 // npx http-server -p [port number] -e html
 let step = 0;
@@ -50,7 +56,6 @@ document.getElementById("button9") .addEventListener("click", on_rating_button_c
 document.getElementById("button10").addEventListener("click", on_rating_button_click);
 document.getElementById("button_back").addEventListener("click", on_back_button_click);
 document.getElementById("button_random").addEventListener("click", on_random_button_click);
-document.getElementById("button_download").addEventListener("click", on_download_button_click);
 
 // FUNCTIONS
 
@@ -125,12 +130,12 @@ function on_rating_button_click() {
     }
     console.log(dex[step].name + ": " + dex[step].rating);
     step = (step + 1);
+    document.getElementById(dex[step - 1].name).style = "display: none;";
     if(step >= dex.length) {
         evaluate();
     } else {
         document.getElementById("name").innerText = dex[step].name;
         document.getElementById(dex[step].name).style = "display: inline;";
-        document.getElementById(dex[step - 1].name).style = "display: none;";
     }
 }
 
@@ -144,6 +149,8 @@ function on_back_button_click() {
 }
 
 function on_random_button_click() {
+    document.getElementById(dex[step].name).style = "display: none;";
+    step = dex.length;
     for(let i = 0; i < dex.length; i++) {
         dex[i].rating = Math.floor(Math.random() * 10) + 1;
     }
@@ -167,6 +174,36 @@ function on_download_button_click() {
 }
 
 function evaluate() {
+    // switch displays
+    document.getElementById("name").innerText = "";
+    document.getElementById("button1").style = "display: none;";
+    document.getElementById("button2").style = "display: none;";
+    document.getElementById("button3").style = "display: none;";
+    document.getElementById("button4").style = "display: none;";
+    document.getElementById("button5").style = "display: none;";
+    document.getElementById("button6").style = "display: none;";
+    document.getElementById("button7").style = "display: none;";
+    document.getElementById("button8").style = "display: none;";
+    document.getElementById("button9").style = "display: none;";
+    document.getElementById("button10").style = "display: none;";
+    document.getElementById("button_back").style = "display: none;";
+    document.getElementById("button_random").style = "display: none;";
+    document.getElementById("eggs_table").style = "display: block;";
+    document.getElementById("types_table").style = "display: block;";
+    document.getElementById("shapes_table").style = "display: block;";
+    document.getElementById("colors_table").style = "display: block;";
+    document.getElementById("stages_table").style = "display: block;";
+    document.getElementById("generations_table").style = "display: block;";
+
+    // dynamically creating the download button
+    const download = document.createElement("button");
+    download.setAttribute("id", "button_download");
+    download.setAttribute("class", "menu_button");
+    download.innerHTML = "<b>download csv &#9660;</b>";
+    document.getElementsByClassName("centered")[0].appendChild(download);
+    document.getElementById("button_download").addEventListener("click", on_download_button_click);
+
+    // calculate results
     for(let i = 0; i < dex.length; i++) {
         let mon = dex[i];
         types.get(mon.type1)[0] += mon.rating;
@@ -185,78 +222,70 @@ function evaluate() {
         shapes.get(mon.shape)[1]++;
         colors.get(mon.color)[0] += mon.rating;
         colors.get(mon.color)[1]++;
-        gens[mon.gen - 1][0] += mon.rating;
-        gens[mon.gen - 1][1]++;
-        stages[mon.stage][0] += mon.rating;
-        stages[mon.stage][1]++;
+        stages.get(mon.stage)[0] += mon.rating;
+        stages.get(mon.stage)[1]++;
+        gens.get(mon.gen)[0] += mon.rating;
+        gens.get(mon.gen)[1]++;
     }
 
+    // display results
+    types = new Map([...types].sort((a, b) => a[1][0] / a[1][1] < b[1][0] / b[1][1]));
+    const types_frag = document.createDocumentFragment();
     for(let [type, data] of types.entries()) {
-        const row = document.createElement("tr");
-        const entry1 = document.createElement("td");
-        const entry2 = document.createElement("td");
-        const entry3 = document.createElement("td");
-        entry1.appendChild(document.createTextNode(type));
-        entry2.appendChild(document.createTextNode((data[0] / data[1]).toFixed(2)));
-        entry3.appendChild(document.createTextNode(standard_deviation(data[0] / data[1], categories.TYPE, type, dex).toFixed(2)));
-        row.appendChild(entry1); row.appendChild(entry2); row.appendChild(entry3);
-        document.getElementById("types_table").appendChild(row);
+        const entry = document.getElementById("types_" + type);
+        entry.childNodes[3].appendChild(document.createTextNode((data[0] / data[1]).toFixed(2)));
+        entry.childNodes[5].appendChild(document.createTextNode(standard_deviation(data[0] / data[1], categories.TYPE, type, dex).toFixed(2)));
+        types_frag.appendChild(entry);
     }
+    document.getElementById("types_table").appendChild(types_frag);
+
+    eggs = new Map([...eggs].sort((a, b) => a[1][0] / a[1][1] < b[1][0] / b[1][1]));
+    const eggs_frag = document.createDocumentFragment();
     for(let [egg, data] of eggs.entries()) {
-        const row = document.createElement("tr");
-        const entry1 = document.createElement("td");
-        const entry2 = document.createElement("td");
-        const entry3 = document.createElement("td");
-        entry1.appendChild(document.createTextNode(egg));
-        entry2.appendChild(document.createTextNode((data[0] / data[1]).toFixed(2)));
-        entry3.appendChild(document.createTextNode(standard_deviation(data[0] / data[1], categories.EGG_GROUP, egg, dex).toFixed(2)));
-        row.appendChild(entry1); row.appendChild(entry2); row.appendChild(entry3);
-        document.getElementById("eggs_table").appendChild(row);
+        const entry = document.getElementById("eggs_" + egg);
+        entry.childNodes[3].appendChild(document.createTextNode((data[0] / data[1]).toFixed(2)));
+        entry.childNodes[5].appendChild(document.createTextNode(standard_deviation(data[0] / data[1], categories.EGG_GROUP, egg, dex).toFixed(2)));
+        eggs_frag.appendChild(entry);
     }
+    document.getElementById("eggs_table").appendChild(eggs_frag);
+
+    shapes = new Map([...shapes].sort((a, b) => a[1][0] / a[1][1] < b[1][0] / b[1][1]));
+    const shapes_frag = document.createDocumentFragment();
     for(let [shape, data] of shapes.entries()) {
-        const row = document.createElement("tr");
-        const entry1 = document.createElement("td");
-        const entry2 = document.createElement("td");
-        const entry3 = document.createElement("td");
-        entry1.appendChild(document.createTextNode(shape));
-        entry2.appendChild(document.createTextNode((data[0] / data[1]).toFixed(2)));
-        entry3.appendChild(document.createTextNode(standard_deviation(data[0] / data[1], categories.SHAPE, shape, dex).toFixed(2)));
-        row.appendChild(entry1); row.appendChild(entry2); row.appendChild(entry3);
-        document.getElementById("shapes_table").appendChild(row);
+        const entry = document.getElementById("shapes_" + shape);
+        entry.childNodes[3].appendChild(document.createTextNode((data[0] / data[1]).toFixed(2)));
+        entry.childNodes[5].appendChild(document.createTextNode(standard_deviation(data[0] / data[1], categories.SHAPE, shape, dex).toFixed(2)));
+        shapes_frag.appendChild(entry);
     }
+    document.getElementById("shapes_table").appendChild(shapes_frag);
+
+    colors = new Map([...colors].sort((a, b) => a[1][0] / a[1][1] < b[1][0] / b[1][1]));
+    const colors_frag = document.createDocumentFragment();
     for(let [color, data] of colors.entries()) {
-        const row = document.createElement("tr");
-        const entry1 = document.createElement("td");
-        const entry2 = document.createElement("td");
-        const entry3 = document.createElement("td");
-        entry1.appendChild(document.createTextNode(color));
-        entry2.appendChild(document.createTextNode((data[0] / data[1]).toFixed(2)));
-        entry3.appendChild(document.createTextNode(standard_deviation(data[0] / data[1], categories.COLOR, color, dex).toFixed(2)));
-        row.appendChild(entry1); row.appendChild(entry2); row.appendChild(entry3);
-        document.getElementById("colors_table").appendChild(row);
+        const entry = document.getElementById("colors_" + color);
+        entry.childNodes[3].appendChild(document.createTextNode((data[0] / data[1]).toFixed(2)));
+        entry.childNodes[5].appendChild(document.createTextNode(standard_deviation(data[0] / data[1], categories.COLOR, color, dex).toFixed(2)));
+        colors_frag.appendChild(entry);
+    }
+    document.getElementById("colors_table").appendChild(colors_frag);
 
+    gens = new Map([...gens].sort((a, b) => a[1][0] / a[1][1] < b[1][0] / b[1][1]));
+    const gens_frag = document.createDocumentFragment();
+    for(let [gen, data] of gens.entries()) {
+        const entry = document.getElementById("generations_" + gen);
+        entry.childNodes[3].appendChild(document.createTextNode((data[0] / data[1]).toFixed(2)));
+        entry.childNodes[5].appendChild(document.createTextNode(standard_deviation(data[0] / data[1], categories.GENERATION, gen, dex).toFixed(2)));
+        gens_frag.appendChild(entry);
     }
-    for(let i = 0; i < gens.length; i++) {
-        const row = document.createElement("tr");
-        const entry1 = document.createElement("td");
-        const entry2 = document.createElement("td");
-        const entry3 = document.createElement("td");
-        entry1.appendChild(document.createTextNode("generation " + (i + 1)));
-        entry2.appendChild(document.createTextNode((gens[i][0] / gens[i][1]).toFixed(2)));
-        entry3.appendChild(document.createTextNode(standard_deviation(gens[i][0] / gens[i][1], categories.GENERATION, i + 1, dex).toFixed(2)));
-        row.appendChild(entry1); row.appendChild(entry2); row.appendChild(entry3);
-        document.getElementById("generations_table").appendChild(row);
+    document.getElementById("generations_table").appendChild(gens_frag);
 
+    stages = new Map([...stages].sort((a, b) => a[1][0] / a[1][1] < b[1][0] / b[1][1]));
+    const stages_frag = document.createDocumentFragment();
+    for(let [stage, data] of stages.entries()) {
+        const entry = document.getElementById("stages_" + stage);
+        entry.childNodes[3].appendChild(document.createTextNode((data[0] / data[1]).toFixed(2)));
+        entry.childNodes[5].appendChild(document.createTextNode(standard_deviation(data[0] / data[1], categories.STAGE, stage, dex).toFixed(2)));
+        stages_frag.appendChild(entry);
     }
-    for(let i = 0; i < stages.length; i++) {
-        const row = document.createElement("tr");
-        const entry1 = document.createElement("td");
-        const entry2 = document.createElement("td");
-        const entry3 = document.createElement("td");
-        entry1.appendChild(document.createTextNode("evolution stage " + (i + 1)));
-        entry2.appendChild(document.createTextNode((stages[i][0] / stages[i][1]).toFixed(2)));
-        entry3.appendChild(document.createTextNode(standard_deviation(stages[i][0] / stages[i][1], categories.STAGE, i, dex).toFixed(2)));
-        row.appendChild(entry1); row.appendChild(entry2); row.appendChild(entry3);
-        document.getElementById("stages_table").appendChild(row);
-    }
+    document.getElementById("stages_table").appendChild(stages_frag);
 }
