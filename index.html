@@ -13,7 +13,7 @@
     <div class="content">
         <div class="body">
             <div class="centered">
-                <div id="name" class="name_display">bulbasaur</div>
+                <div id="name" class="name_display">bulbasaur (1/1233)</div>
                 <p>
                     <img class="pokemon" style="display: inline;" id="bulbasaur"                        src="mons/0001Bulbasaur.webp">
                     <img class="pokemon" style="display: none;"   id="ivysaur"                          src="mons/0002Ivysaur.webp">
@@ -1261,6 +1261,8 @@
                 <button id="button10" class="rating_button">10</button>
                 <p></p>
                 <button id="button_back" class="menu_button"><b>&#9664; go back</b></button>
+                <button id="button_save" class="menu_button"><b>save progress</b></button>
+                <button id="button_clear" class="menu_button"><b>clear saves</b></button>
                 <button id="button_random" class="menu_button"><b>randomize</b></button>
                 <div class="row">
                     <div class="column">
@@ -1781,7 +1783,20 @@
             <ul>
                 <li>Give each pokemon a rating from 1 to 10 using the buttons below.</li>
                 <li>The tool automatically advances after each one, if you misclicked click the "go back" button.</li>
-                <li>When you get to the end, results will be shown. There are 1233 forms to rate, so make sure you have enough time to finish!</li>
+                <li>When you get to the end, results page will be shown, telling you which is your favorite for each category. This tool tracks the 
+                    <a href="https://bulbapedia.bulbagarden.net/wiki/Type">type</a>, 
+                    <a href="https://bulbapedia.bulbagarden.net/wiki/Generation">generation</a>, 
+                    <a href="https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_color">color</a>, 
+                    <a href="https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_shape">shape</a>, 
+                    <a href="https://bulbapedia.bulbagarden.net/wiki/Egg_Group">egg group</a>, and 
+                    <a href="https://bulbapedia.bulbagarden.net/wiki/Evolution">evolution stage</a> 
+                    of all the pokemon forms.
+                </li>
+                <li>The first number in a table row is your average rating for that entry, and the entry at the top of a list is your favorite for the category!</li>
+                <li>The second number is standard deviation for that entry, or "average distance from the average rating". The smaller this number, the more consistent you were for that entry.</li>
+                <li>If you need a break click the "save progress" button, when you return to the site you'll be able to pick up where you left off.</li>
+                <li>If you would like to remove any saved progress, click the "clear saves" button.</li>
+                <li>If you would like a copy of your answers when you've finished, click "download CSV" on the results page. This can be opened in any spreadsheet software, or even notepad.</li>
             </ul>
             <b>Notes:</b>
             <ul>
@@ -1803,10 +1818,9 @@
         </div>
     </div>
     <div class="footer">
-        <p>Ultimate Pokemon Liker made by Xaklor</p>
-        <p>Follow me on <a href="https://bsky.app/profile/xaklor.bsky.social" target="_blank">Bluesky</a>!</p>
-        <p><a href="https://github.com/Xaklor/Ultimate-Pokemon-Liker" target="_blank">Source code</a></p>
-        <p>Images copied from <a href="https://bulbapedia.bulbagarden.net/wiki/Main_Page" target="_blank">Bulbapedia</a></p>
+        <div>Ultimate Pokemon Liker made by Xaklor.</div>
+        <div>See a bug? Have some feedback? Message me on <a href="https://bsky.app/profile/xaklor.bsky.social" target="_blank">Bluesky</a>!</div>
+        <div>Source code available on <a href="https://github.com/Xaklor/Ultimate-Pokemon-Liker" target="_blank">Github</a>. Images copied from <a href="https://bulbapedia.bulbagarden.net/wiki/Main_Page" target="_blank">Bulbapedia</a>.</div>
     </div>
 </div>
 </body>

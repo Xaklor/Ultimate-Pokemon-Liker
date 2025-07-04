@@ -480,7 +480,7 @@ const dex = [
     new pokemon("registeel",                        379,  3, "steel",    null  ,     "none",       null  ,      "biped",      0, "gray",   "0379Registeel.webp"),
     new pokemon("latias",                           380,  3, "dragon",   "psychic",  "none",       null  ,      "wings",      0, "red",    "0380Latias.webp"),
     new pokemon("latios",                           381,  3, "dragon",   "psychic",  "none",       null  ,      "wings",      0, "blue",   "0381Latios.webp"),
-    new pokemon("mega lati@s",                      381,  6, "dragon",   "psychic",  "none",       null  ,      "wings",      4, "purple", "0380Latias-Mega.webp"),
+    new pokemon("mega latias/Latios",               381,  6, "dragon",   "psychic",  "none",       null  ,      "wings",      4, "purple", "0380Latias-Mega.webp"),
     new pokemon("kyogre",                           382,  3, "water",    null  ,     "none",       null  ,      "fins",       0, "blue",   "0382Kyogre.webp"),
     new pokemon("primal kyogre",                    382,  6, "water",    null  ,     "none",       null  ,      "fins",       4, "blue",   "0382Kyogre-Primal.webp"),
     new pokemon("groudon",                          383,  3, "ground",   null  ,     "none",       null  ,      "dino",       0, "red",    "0383Groudon.webp"),

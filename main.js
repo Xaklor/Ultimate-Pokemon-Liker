@@ -42,8 +42,19 @@ let stages = new Map([
     [0, [0, 0]], [1, [0, 0]], [2, [0, 0]], [3, [0, 0]], [4, [0, 0]], [5, [0, 0]]
 ]);
 
-// npx http-server -p [port number] -e html
 let step = 0;
+// checking for saved progress
+if (localStorage.step) {
+    step = parseInt(localStorage.step);
+    let temp = JSON.parse(localStorage.ratings);
+    for(let i = 0; i < dex.length; i++) {
+        dex[i].rating = temp[i];
+    }
+    document.getElementById("bulbasaur").style = "display: none;";
+    document.getElementById(dex[step].name).style = "display: inline;";
+    document.getElementById("name").innerText = dex[step].name + " (" + (step + 1) + "/" + dex.length + ")";
+}
+
 document.getElementById("button1") .addEventListener("click", on_rating_button_click);
 document.getElementById("button2") .addEventListener("click", on_rating_button_click);
 document.getElementById("button3") .addEventListener("click", on_rating_button_click);
@@ -55,6 +66,8 @@ document.getElementById("button8") .addEventListener("click", on_rating_button_c
 document.getElementById("button9") .addEventListener("click", on_rating_button_click);
 document.getElementById("button10").addEventListener("click", on_rating_button_click);
 document.getElementById("button_back").addEventListener("click", on_back_button_click);
+document.getElementById("button_save").addEventListener("click", on_save_button_click);
+document.getElementById("button_clear").addEventListener("click", on_clear_button_click);
 document.getElementById("button_random").addEventListener("click", on_random_button_click);
 
 // FUNCTIONS
@@ -134,7 +147,7 @@ function on_rating_button_click() {
     if(step >= dex.length) {
         evaluate();
     } else {
-        document.getElementById("name").innerText = dex[step].name;
+        document.getElementById("name").innerText = dex[step].name + " (" + (step + 1) + "/" + dex.length + ")";
         document.getElementById(dex[step].name).style = "display: inline;";
     }
 }
@@ -142,18 +155,32 @@ function on_rating_button_click() {
 function on_back_button_click() {
     if(step > 0) {
         step--;
-        document.getElementById("name").innerText = dex[step].name;
+        document.getElementById("name").innerText = dex[step].name + " (" + (step + 1) + "/" + dex.length + ")";
         document.getElementById(dex[step].name).style = "display: inline;";
         document.getElementById(dex[step + 1].name).style = "display: none;";
     }
 }
 
+function on_save_button_click() {
+    const ratings = Array(dex.length);
+    for(let i = 0; i < dex.length; i++) {
+        ratings[i] = dex[i].rating;
+    }
+    localStorage.step = step;
+    // local storage only accepts strings
+    localStorage.ratings = JSON.stringify(ratings);
+}
+
+function on_clear_button_click() {
+    localStorage.clear();
+}
+
 function on_random_button_click() {
     document.getElementById(dex[step].name).style = "display: none;";
-    step = dex.length;
-    for(let i = 0; i < dex.length; i++) {
+    for(let i = step; i < dex.length; i++) {
         dex[i].rating = Math.floor(Math.random() * 10) + 1;
     }
+    step = dex.length;
     evaluate();
 }
 
@@ -187,6 +214,8 @@ function evaluate() {
     document.getElementById("button9").style = "display: none;";
     document.getElementById("button10").style = "display: none;";
     document.getElementById("button_back").style = "display: none;";
+    document.getElementById("button_save").style = "display: none;";
+    document.getElementById("button_clear").style = "display: none;";
     document.getElementById("button_random").style = "display: none;";
     document.getElementById("eggs_table").style = "display: block;";
     document.getElementById("types_table").style = "display: block;";
