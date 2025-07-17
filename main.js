@@ -68,7 +68,7 @@ document.getElementById("button10").addEventListener("click", on_rating_button_c
 document.getElementById("button_back").addEventListener("click", on_back_button_click);
 document.getElementById("button_save").addEventListener("click", on_save_button_click);
 document.getElementById("button_clear").addEventListener("click", on_clear_button_click);
-document.getElementById("button_random").addEventListener("click", on_random_button_click);
+// document.getElementById("button_random").addEventListener("click", on_random_button_click);
 
 // FUNCTIONS
 
@@ -284,7 +284,7 @@ function evaluate() {
     document.getElementById("button_back").style = "display: none;";
     document.getElementById("button_save").style = "display: none;";
     document.getElementById("button_clear").style = "display: none;";
-    document.getElementById("button_random").style = "display: none;";
+    // document.getElementById("button_random").style = "display: none;";
     document.getElementById("eggs_table").style = "display: block;";
     document.getElementById("types_table").style = "display: block;";
     document.getElementById("shapes_table").style = "display: block;";
