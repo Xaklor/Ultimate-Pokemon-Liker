@@ -141,7 +141,6 @@ function on_rating_button_click() {
         case "button9":  dex[step].rating = 9;  break;
         case "button10": dex[step].rating = 10; break;
     }
-    console.log(dex[step].name + ": " + dex[step].rating);
     step = (step + 1);
     document.getElementById(dex[step - 1].name).style = "display: none;";
     if(step >= dex.length) {
@@ -184,10 +183,12 @@ function on_random_button_click() {
     evaluate();
 }
 
-function on_download_button_click() {
-    const output = new Array(dex.length);
+function on_download_button1_click() {
+    const output = new Array(dex.length + 1);
+    output[0] = "dex#,name,rating,type1,type2,egg1,egg2,shape,stage,color\n"
     for(let i = 0; i < dex.length; i++) {
-        output[i] = dex[i].name + "," + dex[i].rating + "\n";
+        output[i + 1] = dex[i].dex + "," + dex[i].name + "," + dex[i].rating +  "," + dex[i].type1 + "," + dex[i].type2 + "," + 
+                        dex[i].egg1 + "," + dex[i].egg2 + "," + dex[i].shape + "," + dex[i].stage + "," + dex[i].color + "\n";
     }
     const blob = new Blob(output, {type: "application/octet-stream"});
     const download = document.createElement("a");
@@ -198,6 +199,73 @@ function on_download_button_click() {
     download.click();
     URL.revokeObjectURL(url);
     document.body.removeChild(download);
+}
+
+function on_download_button2_click() {
+    // length of all table entries, plus headers and spacing
+    const output = new Array(82);
+    output[0] = "type,avg,std\n"
+    let idx = 1;
+    for(let tr of document.getElementById("types_table").childNodes) {
+        if(tr.nodeName == "TR") {
+            output[idx++] = extract_table_row(tr) + "\n";
+        }
+    }
+    output[idx++] = "\n";
+    output[idx++] = "generation,avg,std\n";
+    for(let tr of document.getElementById("generations_table").childNodes) {
+        if(tr.nodeName == "TR") {
+            output[idx++] = extract_table_row(tr) + "\n";
+        }
+    }
+    output[idx++] = "\n";
+    output[idx++] = "color,avg,std\n";
+    for(let tr of document.getElementById("colors_table").childNodes) {
+        if(tr.nodeName == "TR") {
+            output[idx++] = extract_table_row(tr) + "\n";
+        }
+    }
+    output[idx++] = "\n";
+    output[idx++] = "shape,avg,std\n";
+    for(let tr of document.getElementById("shapes_table").childNodes) {
+        if(tr.nodeName == "TR") {
+            output[idx++] = extract_table_row(tr) + "\n";
+        }
+    }
+    output[idx++] = "\n";
+    output[idx++] = "egg group,avg,std\n";
+    for(let tr of document.getElementById("eggs_table").childNodes) {
+        if(tr.nodeName == "TR") {
+            output[idx++] = extract_table_row(tr) + "\n";
+        }
+    }
+    output[idx++] = "\n";
+    output[idx++] = "evolution stage,avg,std\n";
+    for(let tr of document.getElementById("stages_table").childNodes) {
+        if(tr.nodeName == "TR") {
+            output[idx++] = extract_table_row(tr) + "\n";
+        }
+    }
+
+    const blob = new Blob(output, {type: "application/octet-stream"});
+    const download = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    download.href = url;
+    download.download = "results.csv"
+    document.body.appendChild(download);
+    download.click();
+    URL.revokeObjectURL(url);
+    document.body.removeChild(download);
+}
+
+function extract_table_row(tr) {
+    let str = "";
+    for(let td of tr.childNodes) {
+        if(td.nodeName == "TD") {
+            str += td.textContent.trim() + ",";
+        }
+    }
+    return str;
 }
 
 function evaluate() {
@@ -224,13 +292,21 @@ function evaluate() {
     document.getElementById("stages_table").style = "display: block;";
     document.getElementById("generations_table").style = "display: block;";
 
-    // dynamically creating the download button
-    const download = document.createElement("button");
-    download.setAttribute("id", "button_download");
-    download.setAttribute("class", "menu_button");
-    download.innerHTML = "<b>download csv &#9660;</b>";
-    document.getElementsByClassName("centered")[0].appendChild(download);
-    document.getElementById("button_download").addEventListener("click", on_download_button_click);
+    // dynamically creating the download buttons
+    const download_data = document.createElement("button");
+    download_data.setAttribute("id", "button_download1");
+    download_data.setAttribute("class", "menu_button");
+    download_data.innerHTML = "<b>download data csv &#9660;</b>";
+    document.getElementsByClassName("centered")[0].appendChild(download_data);
+    document.getElementById("button_download1").addEventListener("click", on_download_button1_click);
+
+    const download_results = document.createElement("button");
+    download_results.setAttribute("id", "button_download2");
+    download_results.setAttribute("class", "menu_button");
+    download_results.innerHTML = "<b>download results csv &#9660;</b>";
+    document.getElementsByClassName("centered")[0].appendChild(download_results);
+    document.getElementById("button_download2").addEventListener("click", on_download_button2_click);
+
 
     // calculate results
     for(let i = 0; i < dex.length; i++) {
@@ -258,27 +334,28 @@ function evaluate() {
     }
 
     // display results
-    types = new Map([...types].sort((a, b) => a[1][0] / a[1][1] < b[1][0] / b[1][1]));
+    types = new Map([...types].sort((a, b) => (b[1][0] / b[1][1]) - (a[1][0] / a[1][1])));
     const types_frag = document.createDocumentFragment();
     for(let [type, data] of types.entries()) {
         const entry = document.getElementById("types_" + type);
         entry.childNodes[3].appendChild(document.createTextNode((data[0] / data[1]).toFixed(2)));
         entry.childNodes[5].appendChild(document.createTextNode(standard_deviation(data[0] / data[1], categories.TYPE, type, dex).toFixed(2)));
-        types_frag.appendChild(entry);
+        types_frag.append(entry);
     }
     document.getElementById("types_table").appendChild(types_frag);
 
-    eggs = new Map([...eggs].sort((a, b) => a[1][0] / a[1][1] < b[1][0] / b[1][1]));
+
+    eggs = new Map([...eggs].sort((a, b) => (b[1][0] / b[1][1]) - (a[1][0] / a[1][1])));
     const eggs_frag = document.createDocumentFragment();
     for(let [egg, data] of eggs.entries()) {
         const entry = document.getElementById("eggs_" + egg);
         entry.childNodes[3].appendChild(document.createTextNode((data[0] / data[1]).toFixed(2)));
         entry.childNodes[5].appendChild(document.createTextNode(standard_deviation(data[0] / data[1], categories.EGG_GROUP, egg, dex).toFixed(2)));
-        eggs_frag.appendChild(entry);
+        eggs_frag.append(entry);
     }
     document.getElementById("eggs_table").appendChild(eggs_frag);
 
-    shapes = new Map([...shapes].sort((a, b) => a[1][0] / a[1][1] < b[1][0] / b[1][1]));
+    shapes = new Map([...shapes].sort((a, b) => (b[1][0] / b[1][1]) - (a[1][0] / a[1][1])));
     const shapes_frag = document.createDocumentFragment();
     for(let [shape, data] of shapes.entries()) {
         const entry = document.getElementById("shapes_" + shape);
@@ -288,7 +365,7 @@ function evaluate() {
     }
     document.getElementById("shapes_table").appendChild(shapes_frag);
 
-    colors = new Map([...colors].sort((a, b) => a[1][0] / a[1][1] < b[1][0] / b[1][1]));
+    colors = new Map([...colors].sort((a, b) => (b[1][0] / b[1][1]) - (a[1][0] / a[1][1])));
     const colors_frag = document.createDocumentFragment();
     for(let [color, data] of colors.entries()) {
         const entry = document.getElementById("colors_" + color);
@@ -298,7 +375,7 @@ function evaluate() {
     }
     document.getElementById("colors_table").appendChild(colors_frag);
 
-    gens = new Map([...gens].sort((a, b) => a[1][0] / a[1][1] < b[1][0] / b[1][1]));
+    gens = new Map([...gens].sort((a, b) => (b[1][0] / b[1][1]) - (a[1][0] / a[1][1])));
     const gens_frag = document.createDocumentFragment();
     for(let [gen, data] of gens.entries()) {
         const entry = document.getElementById("generations_" + gen);
@@ -308,7 +385,7 @@ function evaluate() {
     }
     document.getElementById("generations_table").appendChild(gens_frag);
 
-    stages = new Map([...stages].sort((a, b) => a[1][0] / a[1][1] < b[1][0] / b[1][1]));
+    stages = new Map([...stages].sort((a, b) => (b[1][0] / b[1][1]) - (a[1][0] / a[1][1])));
     const stages_frag = document.createDocumentFragment();
     for(let [stage, data] of stages.entries()) {
         const entry = document.getElementById("stages_" + stage);
